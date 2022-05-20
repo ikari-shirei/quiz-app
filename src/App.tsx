@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import QuestionCard from './components/QuestionCard'
 import getQuestions from './utils/API'
+import QuestionRouter from './components/QuestionRouter'
 
 function App() {
   const [questions, setQuestions] = useState<any[]>([])
@@ -17,9 +18,9 @@ function App() {
       getQuestions()
     }
 
-    /* if (localStorageQuestions) {
+    if (localStorageQuestions) {
       console.log(JSON.parse(localStorageQuestions))
-    } */
+    }
   }
 
   useEffect((): any => {
@@ -28,7 +29,16 @@ function App() {
 
   return (
     <AppDiv className="App">
-      <QuestionCard currentQuestion={questions[currentQuestionIndex]} />
+      <QuestionRouter
+        questions={questions}
+        currentQuestionIndex={currentQuestionIndex}
+        setCurrentQuestionIndex={setCurrentQuestionIndex}
+      />
+      <QuestionCard
+        questions={questions}
+        currentQuestion={questions[currentQuestionIndex]}
+        currentQuestionIndex={currentQuestionIndex}
+      />
     </AppDiv>
   )
 }
