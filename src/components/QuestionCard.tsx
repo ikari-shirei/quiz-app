@@ -5,6 +5,8 @@ interface QuestionCardProps {
   currentQuestion: CurrentQuestion
   currentQuestionIndex: number
   questions: any[]
+  setResults: any
+  getLocalStorageQuestions: any
 }
 
 interface CurrentQuestion {
@@ -25,9 +27,15 @@ function QuestionCard({
   questions,
   currentQuestion,
   currentQuestionIndex,
+  setResults,
+  getLocalStorageQuestions,
 }: QuestionCardProps) {
   const [allAnswers, setAllAnswers] = useState<any[]>([])
   const [userAnswers, setUserAnswers] = useState<selectedAnswersObj[]>([])
+
+  useEffect((): any => {
+    getLocalStorageQuestions()
+  }, [localStorage])
 
   function initiateUserAnswers() {
     setUserAnswers(
@@ -93,22 +101,27 @@ function QuestionCard({
   function applyClassBoolean(answer: string) {
     let selectedClassName: string = ''
 
-    const userAnswer = userAnswers[currentQuestionIndex]['userAnswer']
-    const correctAnswer = userAnswers[currentQuestionIndex]['correct_answer']
+    let userAnswer: string
+    let correctAnswer: string
 
-    // Correct answer, it is applied in any scenario
-    if (answer === correctAnswer && userAnswer !== '') {
-      selectedClassName = 'correctAnswer'
-    }
+    if (userAnswers.length !== 0 && userAnswers) {
+      userAnswer = userAnswers[currentQuestionIndex]['userAnswer']
+      correctAnswer = userAnswers[currentQuestionIndex]['correct_answer']
 
-    // If user answered correct, other choice wouldn't get highlighted
-    if (answer !== correctAnswer && userAnswer !== '') {
-      selectedClassName = ''
-    }
+      // Correct answer, it is applied in any scenario
+      if (answer === correctAnswer && userAnswer !== '') {
+        selectedClassName = 'correctAnswer'
+      }
 
-    // Wrong answer
-    if (answer !== correctAnswer && userAnswer === answer) {
-      selectedClassName = 'incorrectAnswer'
+      // If user answered correct, other choice wouldn't get highlighted
+      if (answer !== correctAnswer && userAnswer !== '') {
+        selectedClassName = ''
+      }
+
+      // Wrong answer
+      if (answer !== correctAnswer && userAnswer === answer) {
+        selectedClassName = 'incorrectAnswer'
+      }
     }
 
     return selectedClassName
@@ -117,22 +130,27 @@ function QuestionCard({
   function applyClassMultiple(answer: string) {
     let selectedClassName: string = ''
 
-    const userAnswer = userAnswers[currentQuestionIndex]['userAnswer']
-    const correctAnswer = userAnswers[currentQuestionIndex]['correct_answer']
+    let userAnswer: string
+    let correctAnswer: string
 
-    // Correct answer
-    if (userAnswer === correctAnswer && answer === correctAnswer) {
-      selectedClassName = 'correctAnswer'
-    }
+    if (userAnswers.length !== 0 && userAnswers) {
+      userAnswer = userAnswers[currentQuestionIndex]['userAnswer']
+      correctAnswer = userAnswers[currentQuestionIndex]['correct_answer']
 
-    // If user answer wrong, show correct answer anyway
-    if (userAnswer !== '' && answer === correctAnswer) {
-      selectedClassName = 'correctAnswer'
-    }
+      // Correct answer
+      if (userAnswer === correctAnswer && answer === correctAnswer) {
+        selectedClassName = 'correctAnswer'
+      }
 
-    // Incorrect answer
-    if (userAnswer !== correctAnswer && answer === userAnswer) {
-      selectedClassName = 'incorrectAnswer'
+      // If user answer wrong, show correct answer anyway
+      if (userAnswer !== '' && answer === correctAnswer) {
+        selectedClassName = 'correctAnswer'
+      }
+
+      // Incorrect answer
+      if (userAnswer !== correctAnswer && answer === userAnswer) {
+        selectedClassName = 'incorrectAnswer'
+      }
     }
 
     return selectedClassName
@@ -161,20 +179,7 @@ function QuestionCard({
                       key={answer}
                       id={answer}
                       dangerouslySetInnerHTML={{ __html: answer }}
-                      className={
-                        applyClassMultiple(answer)
-                        /* userAnswers[currentQuestionIndex].correct_answer ===
-                          userAnswers[currentQuestionIndex].userAnswer &&
-                        answer ===
-                          userAnswers[currentQuestionIndex].correct_answer
-                          ? 'correctAnswer'
-                          : userAnswers[currentQuestionIndex].userAnswer !==
-                              '' &&
-                            userAnswers[currentQuestionIndex].userAnswer ===
-                              answer
-                          ? 'incorrectAnswer'
-                          : '' */
-                      }
+                      className={applyClassMultiple(answer)}
                     ></li>
                   )
                 })}

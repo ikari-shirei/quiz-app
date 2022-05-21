@@ -5,12 +5,14 @@ interface QuestionRouterProps {
   currentQuestionIndex: number
   setCurrentQuestionIndex: any
   questions: any
+  setIsQuizActive: any
 }
 
 function QuestionRouter({
   currentQuestionIndex,
   setCurrentQuestionIndex,
   questions,
+  setIsQuizActive,
 }: QuestionRouterProps) {
   const [isBackButtonActive, setIsBackButtonActive] = useState<boolean>(false)
   const [isForwardButtonActive, setIsForwardButtonActive] =
@@ -46,6 +48,11 @@ function QuestionRouter({
     }
   }, [currentQuestionIndex])
 
+  function completeQuiz() {
+    setIsQuizActive(false)
+    localStorage.removeItem('questions')
+  }
+
   return (
     <QuestionRouterContainer>
       <button
@@ -61,7 +68,9 @@ function QuestionRouter({
         Forward
       </button>
 
-      {!isForwardButtonActive && <button>Complete Quiz</button>}
+      {!isForwardButtonActive && (
+        <button onClick={completeQuiz}>Complete Quiz</button>
+      )}
     </QuestionRouterContainer>
   )
 }

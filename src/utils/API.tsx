@@ -1,12 +1,23 @@
 import axios from 'axios'
 
-const api: any = process.env.REACT_APP_API_KEY
+async function getQuestions(
+  amount: number,
+  category: number,
+  difficulty: string,
+  questionType: string
+) {
+  const api = `https://opentdb.com/api.php?amount=${amount}${
+    category !== 0 ? `&category=` + category : ''
+  }${difficulty && `&difficulty=` + difficulty}${
+    questionType && `&type=` + questionType
+  }`
 
-async function getQuestions() {
+  console.log(api)
+
   axios
     .get(api)
     .then((response) => {
-      console.log(response.data.results, 'API CALL')
+      console.log(response.data.results, 'API CALL saved to local storage')
       localStorage.setItem('questions', JSON.stringify(response.data.results))
     })
     .catch((error) => {
