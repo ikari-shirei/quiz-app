@@ -30,19 +30,18 @@ function QuestionCard({
   const [userAnswers, setUserAnswers] = useState<selectedAnswersObj[]>([])
 
   function initiateUserAnswers() {
-    if (questions) {
-      setUserAnswers(
-        questions.map((question: any) => {
-          return { correct_answer: question.correct_answer, userAnswer: '' }
-        })
-      )
-    }
+    setUserAnswers(
+      questions.map((question: any) => {
+        return { correct_answer: question.correct_answer, userAnswer: '' }
+      })
+    )
   }
 
   useEffect(() => {
     initiateUserAnswers()
   }, [questions])
 
+  // Concatenate wrong answers and correct answer
   function uniteAnswers() {
     const unitedAnswers = questions.map((question: any) => {
       if (question.type === 'multiple') {
@@ -60,7 +59,6 @@ function QuestionCard({
 
   function randomizeAnswers() {
     if (allAnswers !== []) {
-      console.log(allAnswers, 'all anwswers')
       setAllAnswers((prev) =>
         prev.map((answers: any) => {
           if (answers) {
@@ -76,22 +74,68 @@ function QuestionCard({
     randomizeAnswers()
   }, [questions])
 
-  useEffect(() => {
-    console.log(allAnswers)
-  }, [allAnswers])
-
-  function checkAnswer(e: any) {
+  // Save user's answer
+  function saveAnswer(e: any) {
     const answerId = e.target.id
     const currentUserAnswer = userAnswers[currentQuestionIndex]['userAnswer']
 
+    console.log(answerId, userAnswers[currentQuestionIndex]['correct_answer'])
+
+    // If user answered question, the answer cannot be changed
     if (currentUserAnswer === '') {
       setUserAnswers((prev) => [
         ...prev,
         (prev[currentQuestionIndex]['userAnswer'] = answerId),
       ])
     }
+  }
 
-    console.log(userAnswers)
+  function applyClassBoolean(answer: string) {
+    let selectedClassName: string = ''
+
+    const userAnswer = userAnswers[currentQuestionIndex]['userAnswer']
+    const correctAnswer = userAnswers[currentQuestionIndex]['correct_answer']
+
+    // Correct answer, it is applied in any scenario
+    if (answer === correctAnswer && userAnswer !== '') {
+      selectedClassName = 'correctAnswer'
+    }
+
+    // If user answered correct, other choice wouldn't get highlighted
+    if (answer !== correctAnswer && userAnswer !== '') {
+      selectedClassName = ''
+    }
+
+    // Wrong answer
+    if (answer !== correctAnswer && userAnswer === answer) {
+      selectedClassName = 'incorrectAnswer'
+    }
+
+    return selectedClassName
+  }
+
+  function applyClassMultiple(answer: string) {
+    let selectedClassName: string = ''
+
+    const userAnswer = userAnswers[currentQuestionIndex]['userAnswer']
+    const correctAnswer = userAnswers[currentQuestionIndex]['correct_answer']
+
+    // Correct answer
+    if (userAnswer === correctAnswer && answer === correctAnswer) {
+      selectedClassName = 'correctAnswer'
+    }
+
+    // If user answer wrong, show correct answer anyway
+    if (userAnswer !== '' && answer === correctAnswer) {
+      selectedClassName = 'correctAnswer'
+    }
+
+    // Incorrect answer
+    if (userAnswer !== correctAnswer && answer === userAnswer) {
+      selectedClassName = 'incorrectAnswer'
+    }
+
+    return selectedClassName
   }
 
   return (
@@ -106,18 +150,20 @@ function QuestionCard({
             dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
           ></Question>
 
+          {/* Multiple answers */}
           {currentQuestion.type === 'multiple' && (
             <Answers>
               {allAnswers[currentQuestionIndex] &&
                 allAnswers[currentQuestionIndex].map((answer: string) => {
                   return (
                     <li
-                      onClick={checkAnswer}
+                      onClick={saveAnswer}
                       key={answer}
                       id={answer}
                       dangerouslySetInnerHTML={{ __html: answer }}
                       className={
-                        userAnswers[currentQuestionIndex].correct_answer ===
+                        applyClassMultiple(answer)
+                        /* userAnswers[currentQuestionIndex].correct_answer ===
                           userAnswers[currentQuestionIndex].userAnswer &&
                         answer ===
                           userAnswers[currentQuestionIndex].correct_answer
@@ -127,7 +173,7 @@ function QuestionCard({
                             userAnswers[currentQuestionIndex].userAnswer ===
                               answer
                           ? 'incorrectAnswer'
-                          : ''
+                          : '' */
                       }
                     ></li>
                   )
@@ -135,12 +181,21 @@ function QuestionCard({
             </Answers>
           )}
 
+          {/* Boolean answers */}
           {currentQuestion.type === 'boolean' && (
             <Answers>
-              <li onClick={checkAnswer} id="True" className={''}>
+              <li
+                onClick={saveAnswer}
+                id="True"
+                className={applyClassBoolean('True')}
+              >
                 True
               </li>
-              <li onClick={checkAnswer} id="False" className={''}>
+              <li
+                onClick={saveAnswer}
+                id="False"
+                className={applyClassBoolean('False')}
+              >
                 False
               </li>
             </Answers>
