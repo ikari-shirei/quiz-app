@@ -136,9 +136,6 @@ const QuestionRouterContainer = styled.div`
     cursor: pointer;
   }
 
-  .active {
-  }
-
   .passive {
     opacity: 0.3;
   }

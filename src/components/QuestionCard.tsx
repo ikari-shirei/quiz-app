@@ -1,3 +1,6 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -10,7 +13,6 @@ interface QuestionCardProps {
   currentQuestion: CurrentQuestion
   currentQuestionIndex: number
   questions: any[]
-  setResults: any
   userAnswers: selectedAnswersObj[]
   setUserAnswers: any
 }
@@ -28,7 +30,6 @@ function QuestionCard({
   questions,
   currentQuestion,
   currentQuestionIndex,
-  setResults,
   userAnswers,
   setUserAnswers,
 }: QuestionCardProps) {
@@ -48,7 +49,7 @@ function QuestionCard({
 
   // Concatenate wrong answers and correct answer
   function uniteAnswers() {
-    const unitedAnswers = questions.map((question: any) => {
+    const unitedAnswers = questions.map((question: any): string[] | void => {
       if (question.type === 'multiple') {
         return [
           question.incorrect_answers[0],
@@ -83,8 +84,6 @@ function QuestionCard({
   function saveAnswer(e: any) {
     const answerId = e.target.id
     const currentUserAnswer = userAnswers[currentQuestionIndex]['userAnswer']
-    const currentCorrectAnswer =
-      userAnswers[currentQuestionIndex]['correct_answer']
 
     // If user answered question, the answer cannot be changed
     if (currentUserAnswer === '') {

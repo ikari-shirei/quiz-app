@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import QuestionCard from './components/QuestionCard'
 import getQuestions from './utils/API'
@@ -17,7 +17,6 @@ function App() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0)
 
   const [userAnswers, setUserAnswers] = useState<selectedAnswersObj[]>([])
-
   const [results, setResults] = useState<{
     correctCount: number
     incorrectCount: number
@@ -53,7 +52,6 @@ function App() {
             questions={questions}
             currentQuestion={questions[currentQuestionIndex]}
             currentQuestionIndex={currentQuestionIndex}
-            setResults={setResults}
             userAnswers={userAnswers}
             setUserAnswers={setUserAnswers}
           />
@@ -65,16 +63,13 @@ function App() {
             setIsQuizActive={setIsQuizActive}
             setCurrentQuestionIndex={setCurrentQuestionIndex}
             getData={getData}
-            amount={amount}
             setAmount={setAmount}
-            category={category}
             setCategory={setCategory}
-            difficulty={difficulty}
             setDifficulty={setDifficulty}
-            questionType={questionType}
             setQuestionType={setQuestionType}
             setResults={setResults}
           />
+          {/* Show results */}
           {!isQuizActive && results ? <Results results={results} /> : ''}
         </div>
       )}

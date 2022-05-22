@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 function Results({ results }: any) {
-  console.log(results, 'result compon')
-
   return (
     <ResultsContainer>
       <h2>Congrat</h2>

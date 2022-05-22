@@ -1,19 +1,15 @@
 import styled from 'styled-components'
 import Select from 'react-select'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 interface OptionsProps {
   questions: any[]
   setIsQuizActive: any
   setCurrentQuestionIndex: any
   getData: any
-  amount: number
   setAmount: any
-  category: number
   setCategory: any
-  difficulty: string
   setDifficulty: any
-  questionType: string
   setQuestionType: any
   setResults: any
 }
@@ -23,13 +19,9 @@ function Options({
   setIsQuizActive,
   setCurrentQuestionIndex,
   getData,
-  amount,
   setAmount,
-  category,
   setCategory,
-  difficulty,
   setDifficulty,
-  questionType,
   setQuestionType,
   setResults,
 }: OptionsProps) {
