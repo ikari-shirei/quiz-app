@@ -72,7 +72,7 @@ function Options({
   const typeOptions = [
     { value: 'any', label: 'Any' },
     { value: 'multiple', label: 'Multiple' },
-    { value: 'boolean', label: 'Boolean' },
+    { value: 'boolean', label: 'True False' },
   ]
 
   function startQuiz(e: any) {
@@ -100,6 +100,7 @@ function Options({
               max="50"
               onChange={handleAmountChange}
               placeholder="Between 10 - 50"
+              defaultValue={10}
             ></input>
           </label>
         </AmountContainer>
@@ -114,7 +115,7 @@ function Options({
         </CategoryContainer> */}
 
         <DifficultyContainer>
-          <h2>Difficulty: </h2>
+          <h2>Difficulty</h2>
           <Select
             onChange={handleDifficultyOptions}
             options={difficultyOptions}
@@ -122,7 +123,7 @@ function Options({
           />
         </DifficultyContainer>
         <TypeContainer>
-          <h2>Type: </h2>
+          <h2>Type</h2>
           <Select
             onChange={handleTypeOptions}
             options={typeOptions}
@@ -144,27 +145,54 @@ const OptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  color: #15133c;
+  padding: 16px;
+  margin: 16px;
+
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.685);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  h2 {
+    font-size: 1rem;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
 `
 
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 16px;
 `
 
 const AmountContainer = styled.div`
   display: flex;
   flex-direction: column;
 
+  label {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
   input {
     display: flex;
     width: 100%;
     height: 38px;
-
     font-size: 1rem;
-
-    padding: 0;
-    border: 1px solid #00000034;
+    padding-left: 16px;
+    border: none;
   }
 
   input::-webkit-outer-spin-button,
@@ -196,8 +224,8 @@ const TypeContainer = styled.div`
 const StartButtonInput = styled.input`
   margin: 32px 0;
 
-  border: 2px solid black;
-  background-color: black;
+  border: none;
+  background-color: #15133c;
   color: white;
   font-weight: bold;
 
@@ -210,7 +238,8 @@ const StartButtonInput = styled.input`
 
   &:hover {
     transition: 0.2s;
-    background-color: blue;
+    border: none;
+    background-color: rgba(14, 174, 87, 1);
   }
 `
 

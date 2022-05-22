@@ -18,10 +18,7 @@ async function getQuestions(
   axios
     .get(api)
     .then((response) => {
-      console.log(response.data.results, 'API CALL saved to local storage')
-
       setQuestions(response.data.results)
-      /* localStorage.setItem('questions', JSON.stringify(response.data.results)) */
     })
     .catch((error) => {
       console.log(error)

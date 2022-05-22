@@ -36,7 +36,10 @@ function App() {
   return (
     <AppContainer className="App">
       {isQuizActive ? (
-        <div>
+        <QuestionContainer>
+          <QuizAppHeader>
+            <h1>Quiz App</h1>
+          </QuizAppHeader>
           <QuestionRouter
             questions={questions}
             currentQuestionIndex={currentQuestionIndex}
@@ -55,9 +58,15 @@ function App() {
             userAnswers={userAnswers}
             setUserAnswers={setUserAnswers}
           />
-        </div>
+        </QuestionContainer>
       ) : (
-        <div>
+        <StartAndResultsContainer>
+          <QuizAppHeader>
+            <h1>Quiz App</h1>
+          </QuizAppHeader>
+          {/* Show results */}
+          {!isQuizActive && results ? <Results results={results} /> : ''}
+
           <StartOptions
             questions={questions}
             setIsQuizActive={setIsQuizActive}
@@ -69,9 +78,7 @@ function App() {
             setQuestionType={setQuestionType}
             setResults={setResults}
           />
-          {/* Show results */}
-          {!isQuizActive && results ? <Results results={results} /> : ''}
-        </div>
+        </StartAndResultsContainer>
       )}
     </AppContainer>
   )
@@ -81,8 +88,40 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
-  box-sizing: border-box;
+  color: #15133c;
+`
+
+const QuizAppHeader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px;
+
+  h1 {
+    margin: 0;
+  }
+`
+
+const QuestionContainer = styled.div`
+  width: 500px;
+
+  @media screen and (max-width: 500px) {
+    & {
+      width: 100%;
+    }
+  }
+`
+
+const StartAndResultsContainer = styled.div`
+  width: 500px;
+
+  @media screen and (max-width: 500px) {
+    & {
+      width: 100%;
+    }
+  }
 `
 
 export default App

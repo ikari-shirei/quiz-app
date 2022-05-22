@@ -90,33 +90,37 @@ function QuestionRouter({
   }
 
   function completeQuiz() {
-    calculateResults()
-    setIsQuizActive(false)
+    const askPermission = window.confirm('Are you sure?')
 
-    // Clear options
-    setAmount(10)
-    setDifficulty('')
-    setQuestionType('')
+    if (askPermission) {
+      calculateResults()
+      setIsQuizActive(false)
+
+      // Clear options
+      setAmount(10)
+      setDifficulty('')
+      setQuestionType('')
+    }
   }
 
   return (
     <QuestionRouterContainer>
       <button
         onClick={goBackward}
-        className={isBackButtonActive ? 'active' : 'passive'}
+        className={isBackButtonActive ? '' : 'passive'}
       >
         Back
       </button>
       <button
         onClick={goForward}
-        className={isForwardButtonActive ? 'active' : 'passive'}
+        className={isForwardButtonActive ? '' : 'passive'}
       >
         Forward
       </button>
 
-      {!isForwardButtonActive && (
-        <button onClick={completeQuiz}>Complete Quiz</button>
-      )}
+      <button className="complete-button" onClick={completeQuiz}>
+        Complete
+      </button>
     </QuestionRouterContainer>
   )
 }
@@ -129,11 +133,25 @@ const QuestionRouterContainer = styled.div`
     font-weight: bold;
     background-color: transparent;
 
-    width: 100px;
-    height: 35px;
+    width: 120px;
+    height: 40px;
     border: solid 2px black;
     margin: 16px;
+    padding: 16px auto;
     cursor: pointer;
+  }
+
+  .complete-button {
+    color: white;
+    border: none;
+    background-color: #15133c;
+    transition: 0.2s;
+
+    &:hover {
+      transition: 0.2s;
+      border: none;
+      background-color: rgba(14, 174, 87, 1);
+    }
   }
 
   .passive {

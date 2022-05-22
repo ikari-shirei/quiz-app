@@ -242,6 +242,14 @@ const CardContainer = styled.div`
   justify-content: center;
   border: 2px solid black;
   margin: 16px;
+
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.685);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 `
 
 const Header = styled.h1`
@@ -262,21 +270,21 @@ const Category = styled.h2`
 
 const Difficulty = styled.h3`
   font-size: 1rem;
-  font-weight: normal;
+  font-weight: bold;
   padding: 0;
   margin: 0;
   margin: 0 16px;
 
   .green {
-    color: green;
+    color: rgba(14, 174, 87, 1);
   }
 
   .orange {
-    color: orange;
+    color: #dba43d;
   }
 
   .red {
-    color: red;
+    color: #ec1c1c;
   }
 `
 
@@ -307,12 +315,14 @@ const Answers = styled.ul`
   }
 
   .correctAnswer {
-    background-color: green;
+    background-color: rgba(14, 174, 87, 1);
+    border-color: rgba(14, 174, 87, 1);
     color: white;
   }
 
   .incorrectAnswer {
-    background-color: red;
+    background-color: #ec1c1c;
+    border-color: #ec1c1c;
     color: white;
   }
 `
