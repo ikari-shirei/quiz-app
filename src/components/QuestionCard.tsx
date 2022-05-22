@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 interface selectedAnswersObj {
   correct_answer: string
@@ -175,64 +176,66 @@ function QuestionCard({
     return selectedClassName
   }
 
-  return (
-    currentQuestion && (
-      <div className="QuestionCard">
-        <CardContainer key={currentQuestion.question}>
-          <Header>
-            Question {currentQuestionIndex + 1} of {questions.length}
-          </Header>
-          <Category>{currentQuestion.category}</Category>
-          <Difficulty>
-            <span className={applyClassDifficulty(currentQuestion.difficulty)}>
-              {currentQuestion.difficulty}
-            </span>
-          </Difficulty>
+  return currentQuestion ? (
+    <div className="QuestionCard">
+      <CardContainer key={currentQuestion.question}>
+        <Header>
+          Question {currentQuestionIndex + 1} of {questions.length}
+        </Header>
+        <Category>{currentQuestion.category}</Category>
+        <Difficulty>
+          <span className={applyClassDifficulty(currentQuestion.difficulty)}>
+            {currentQuestion.difficulty}
+          </span>
+        </Difficulty>
 
-          <Question
-            dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
-          ></Question>
+        <Question
+          dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
+        ></Question>
 
-          {/* Multiple answers */}
-          {currentQuestion.type === 'multiple' && (
-            <Answers>
-              {allAnswers[currentQuestionIndex] &&
-                allAnswers[currentQuestionIndex].map((answer: string) => {
-                  return (
-                    <li
-                      onClick={saveAnswer}
-                      key={answer}
-                      id={answer}
-                      dangerouslySetInnerHTML={{ __html: answer }}
-                      className={applyClassMultiple(answer)}
-                    ></li>
-                  )
-                })}
-            </Answers>
-          )}
+        {/* Multiple answers */}
+        {currentQuestion.type === 'multiple' && (
+          <Answers>
+            {allAnswers[currentQuestionIndex] &&
+              allAnswers[currentQuestionIndex].map((answer: string) => {
+                return (
+                  <li
+                    onClick={saveAnswer}
+                    key={answer}
+                    id={answer}
+                    dangerouslySetInnerHTML={{ __html: answer }}
+                    className={applyClassMultiple(answer)}
+                  ></li>
+                )
+              })}
+          </Answers>
+        )}
 
-          {/* Boolean answers */}
-          {currentQuestion.type === 'boolean' && (
-            <Answers>
-              <li
-                onClick={saveAnswer}
-                id="True"
-                className={applyClassBoolean('True')}
-              >
-                True
-              </li>
-              <li
-                onClick={saveAnswer}
-                id="False"
-                className={applyClassBoolean('False')}
-              >
-                False
-              </li>
-            </Answers>
-          )}
-        </CardContainer>
-      </div>
-    )
+        {/* Boolean answers */}
+        {currentQuestion.type === 'boolean' && (
+          <Answers>
+            <li
+              onClick={saveAnswer}
+              id="True"
+              className={applyClassBoolean('True')}
+            >
+              True
+            </li>
+            <li
+              onClick={saveAnswer}
+              id="False"
+              className={applyClassBoolean('False')}
+            >
+              False
+            </li>
+          </Answers>
+        )}
+      </CardContainer>
+    </div>
+  ) : (
+    <LoadingContainer>
+      <ClipLoader color="white" loading={true} size={150} />
+    </LoadingContainer>
   )
 }
 
@@ -325,6 +328,12 @@ const Answers = styled.ul`
     border-color: #ec1c1c;
     color: white;
   }
+`
+const LoadingContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
 `
 
 export default QuestionCard
