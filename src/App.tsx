@@ -6,10 +6,17 @@ import QuestionRouter from './components/QuestionRouter'
 import Results from './components/Results'
 import StartOptions from './components/StartOptions'
 
+interface selectedAnswersObj {
+  correct_answer: string
+  userAnswer: string
+}
+
 function App() {
   const [isQuizActive, setIsQuizActive] = useState<boolean>(false)
   const [questions, setQuestions] = useState<any[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0)
+
+  const [userAnswers, setUserAnswers] = useState<selectedAnswersObj[]>([])
 
   const [results, setResults] = useState<{
     correctCount: number
@@ -23,32 +30,9 @@ function App() {
   const [questionType, setQuestionType] = useState<string>('')
 
   function getData() {
-    const localStorageQuestions: string | null =
-      localStorage.getItem('questions')
-
-    getQuestions(amount, category, difficulty, questionType)
-
-    if (localStorageQuestions) {
-      setQuestions(JSON.parse(localStorageQuestions))
-    }
-
-    if (localStorageQuestions) {
-      console.log(JSON.parse(localStorageQuestions))
-    }
+    setQuestions([])
+    getQuestions(amount, category, difficulty, questionType, setQuestions)
   }
-
-  function getLocalStorageQuestions() {
-    const localStorageQuestions: string | null =
-      localStorage.getItem('questions')
-
-    if (localStorageQuestions) {
-      setQuestions(JSON.parse(localStorageQuestions))
-    }
-  }
-
-  useEffect((): any => {
-    getLocalStorageQuestions()
-  }, [localStorage.getItem('questions')])
 
   return (
     <AppContainer className="App">
@@ -59,13 +43,19 @@ function App() {
             currentQuestionIndex={currentQuestionIndex}
             setCurrentQuestionIndex={setCurrentQuestionIndex}
             setIsQuizActive={setIsQuizActive}
+            setAmount={setAmount}
+            setDifficulty={setDifficulty}
+            setQuestionType={setQuestionType}
+            userAnswers={userAnswers}
+            setResults={setResults}
           />
           <QuestionCard
             questions={questions}
             currentQuestion={questions[currentQuestionIndex]}
             currentQuestionIndex={currentQuestionIndex}
             setResults={setResults}
-            getLocalStorageQuestions={getLocalStorageQuestions}
+            userAnswers={userAnswers}
+            setUserAnswers={setUserAnswers}
           />
         </div>
       ) : (
@@ -83,8 +73,9 @@ function App() {
             setDifficulty={setDifficulty}
             questionType={questionType}
             setQuestionType={setQuestionType}
+            setResults={setResults}
           />
-          {!isQuizActive && results ? <Results /> : ''}
+          {!isQuizActive && results ? <Results results={results} /> : ''}
         </div>
       )}
     </AppContainer>

@@ -15,6 +15,7 @@ interface OptionsProps {
   setDifficulty: any
   questionType: string
   setQuestionType: any
+  setResults: any
 }
 
 function Options({
@@ -30,6 +31,7 @@ function Options({
   setDifficulty,
   questionType,
   setQuestionType,
+  setResults,
 }: OptionsProps) {
   function handleAmountChange(e: any) {
     console.log(e.target.value, 'target value')
@@ -84,8 +86,8 @@ function Options({
   function startQuiz(e: any) {
     e.preventDefault()
 
-    localStorage.removeItem('questions')
     getData()
+    setResults(null)
     setCurrentQuestionIndex(0)
     setIsQuizActive(true)
   }
@@ -136,7 +138,11 @@ function Options({
           />
         </TypeContainer>
 
-        <input type="submit" value="Start Quiz" onClick={startQuiz} />
+        <StartButtonInput
+          type="submit"
+          value="Start Quiz"
+          onClick={startQuiz}
+        />
       </FormContainer>
     </OptionsContainer>
   )
@@ -193,6 +199,27 @@ const DifficultyContainer = styled.div`
 const TypeContainer = styled.div`
   display: flex;
   flex-direction: column;
+`
+
+const StartButtonInput = styled.input`
+  margin: 32px 0;
+
+  border: 2px solid black;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+
+  width: 100%;
+  height: 38px;
+
+  transition: 0.2s;
+  transition-timing-function: ease-out;
+  cursor: pointer;
+
+  &:hover {
+    transition: 0.2s;
+    background-color: blue;
+  }
 `
 
 export default Options

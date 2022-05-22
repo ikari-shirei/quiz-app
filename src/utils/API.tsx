@@ -4,7 +4,8 @@ async function getQuestions(
   amount: number,
   category: number,
   difficulty: string,
-  questionType: string
+  questionType: string,
+  setQuestions: any
 ) {
   const api = `https://opentdb.com/api.php?amount=${amount}${
     category !== 0 ? `&category=` + category : ''
@@ -18,7 +19,9 @@ async function getQuestions(
     .get(api)
     .then((response) => {
       console.log(response.data.results, 'API CALL saved to local storage')
-      localStorage.setItem('questions', JSON.stringify(response.data.results))
+
+      setQuestions(response.data.results)
+      /* localStorage.setItem('questions', JSON.stringify(response.data.results)) */
     })
     .catch((error) => {
       console.log(error)

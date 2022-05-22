@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+interface selectedAnswersObj {
+  correct_answer: string
+  userAnswer: string
+}
+
 interface QuestionCardProps {
   currentQuestion: CurrentQuestion
   currentQuestionIndex: number
   questions: any[]
   setResults: any
-  getLocalStorageQuestions: any
+  userAnswers: selectedAnswersObj[]
+  setUserAnswers: any
 }
 
 interface CurrentQuestion {
@@ -18,24 +24,15 @@ interface CurrentQuestion {
   type: string
 }
 
-interface selectedAnswersObj {
-  correct_answer: string
-  userAnswer: string
-}
-
 function QuestionCard({
   questions,
   currentQuestion,
   currentQuestionIndex,
   setResults,
-  getLocalStorageQuestions,
+  userAnswers,
+  setUserAnswers,
 }: QuestionCardProps) {
   const [allAnswers, setAllAnswers] = useState<any[]>([])
-  const [userAnswers, setUserAnswers] = useState<selectedAnswersObj[]>([])
-
-  useEffect((): any => {
-    getLocalStorageQuestions()
-  }, [localStorage])
 
   function initiateUserAnswers() {
     setUserAnswers(
@@ -86,15 +83,20 @@ function QuestionCard({
   function saveAnswer(e: any) {
     const answerId = e.target.id
     const currentUserAnswer = userAnswers[currentQuestionIndex]['userAnswer']
-
-    console.log(answerId, userAnswers[currentQuestionIndex]['correct_answer'])
+    const currentCorrectAnswer =
+      userAnswers[currentQuestionIndex]['correct_answer']
 
     // If user answered question, the answer cannot be changed
     if (currentUserAnswer === '') {
-      setUserAnswers((prev) => [
-        ...prev,
-        (prev[currentQuestionIndex]['userAnswer'] = answerId),
-      ])
+      setUserAnswers((prev: selectedAnswersObj[]) => {
+        const newAnswers = prev.map((x) => {
+          return prev[currentQuestionIndex] === x
+            ? { ...x, userAnswer: answerId }
+            : x
+        })
+
+        return newAnswers
+      })
     }
   }
 
@@ -156,13 +158,37 @@ function QuestionCard({
     return selectedClassName
   }
 
+  function applyClassDifficulty(difficulty: string) {
+    let selectedClassName: string = ''
+
+    if (difficulty === 'easy') {
+      selectedClassName = 'green'
+    }
+
+    if (difficulty === 'medium') {
+      selectedClassName = 'orange'
+    }
+
+    if (difficulty === 'hard') {
+      selectedClassName = 'red'
+    }
+
+    return selectedClassName
+  }
+
   return (
     currentQuestion && (
       <div className="QuestionCard">
         <CardContainer key={currentQuestion.question}>
-          <Header>Question {currentQuestionIndex + 1}</Header>
+          <Header>
+            Question {currentQuestionIndex + 1} of {questions.length}
+          </Header>
           <Category>{currentQuestion.category}</Category>
-          <Difficulty>{currentQuestion.difficulty}</Difficulty>
+          <Difficulty>
+            <span className={applyClassDifficulty(currentQuestion.difficulty)}>
+              {currentQuestion.difficulty}
+            </span>
+          </Difficulty>
 
           <Question
             dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
@@ -241,7 +267,18 @@ const Difficulty = styled.h3`
   padding: 0;
   margin: 0;
   margin: 0 16px;
-  color: green;
+
+  .green {
+    color: green;
+  }
+
+  .orange {
+    color: orange;
+  }
+
+  .red {
+    color: red;
+  }
 `
 
 const Question = styled.h3`

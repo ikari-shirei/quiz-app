@@ -6,6 +6,11 @@ interface QuestionRouterProps {
   setCurrentQuestionIndex: any
   questions: any
   setIsQuizActive: any
+  setAmount: any
+  setDifficulty: any
+  setQuestionType: any
+  userAnswers: any[]
+  setResults: any
 }
 
 function QuestionRouter({
@@ -13,6 +18,11 @@ function QuestionRouter({
   setCurrentQuestionIndex,
   questions,
   setIsQuizActive,
+  setAmount,
+  setDifficulty,
+  setQuestionType,
+  userAnswers,
+  setResults,
 }: QuestionRouterProps) {
   const [isBackButtonActive, setIsBackButtonActive] = useState<boolean>(false)
   const [isForwardButtonActive, setIsForwardButtonActive] =
@@ -48,9 +58,45 @@ function QuestionRouter({
     }
   }, [currentQuestionIndex])
 
+  function calculateResults() {
+    let correct: number = 0
+    let incorrect: number = 0
+    let empty: number = 0
+
+    for (let i = 0; i < userAnswers.length; i++) {
+      if (userAnswers[i].correct_answer === userAnswers[i].userAnswer) {
+        correct = correct + 1
+      }
+
+      // Incorrect
+      if (
+        userAnswers[i].correct_answer !== userAnswers[i].userAnswer &&
+        userAnswers[i].userAnswer !== ''
+      ) {
+        incorrect += 1
+      }
+
+      // Empty
+      if (userAnswers[i].userAnswer === '') {
+        empty += 1
+      }
+    }
+
+    setResults({
+      correctCount: correct,
+      incorrectCount: incorrect,
+      emptyCount: empty,
+    })
+  }
+
   function completeQuiz() {
+    calculateResults()
     setIsQuizActive(false)
-    localStorage.removeItem('questions')
+
+    // Clear options
+    setAmount(10)
+    setDifficulty('')
+    setQuestionType('')
   }
 
   return (
