@@ -111,15 +111,16 @@ function QuestionRouter({
       >
         Back
       </button>
+
+      <button className="complete-button" onClick={completeQuiz}>
+        Complete
+      </button>
+
       <button
         onClick={goForward}
         className={isForwardButtonActive ? '' : 'passive'}
       >
         Forward
-      </button>
-
-      <button className="complete-button" onClick={completeQuiz}>
-        Complete
       </button>
     </QuestionRouterContainer>
   )
@@ -127,7 +128,7 @@ function QuestionRouter({
 
 const QuestionRouterContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 
   button {
     font-weight: bold;

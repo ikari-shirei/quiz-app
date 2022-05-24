@@ -1,4 +1,6 @@
 .env
+StartOptions.test.js
+App.test.js
 
 # dependencies
 /node_modules
